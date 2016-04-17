@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import hu.juzraai.toolbox.test.Check;
+
 /**
  * Functions to create MD5 hash from a String or a file.
  *
@@ -13,9 +15,10 @@ import java.security.NoSuchAlgorithmException;
  * @author Zsolt Jurányi
  *
  */
-public class MD5 {
+public class MD5 { // TODO doc
 
 	public static byte[] createChecksum(String filename) throws Exception {
+		Check.notNull(filename, "filename must not be null");
 		InputStream fis = new FileInputStream(filename);
 
 		byte[] buffer = new byte[1024];
@@ -34,6 +37,7 @@ public class MD5 {
 	}
 
 	public static String fromFile(String filename) throws Exception {
+		Check.notNull(filename, "filename must not be null");
 		byte[] b = createChecksum(filename);
 		String result = "";
 

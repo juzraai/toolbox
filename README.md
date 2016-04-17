@@ -2,36 +2,44 @@
 
 **Collection of my reusable codes. :)**
 
+
+
 ## Getting started
 
-You can use this project as dependency via [JitPack.io](http://jitpack.io).
+The easiest way to use *Toolbox* is adding it as dependency from [JitPack.io](https://jitpack.io/#juzraai/toolbox). Follow the link to get information on how to do this, click on the green *"Get it"* button besides the latest version.
 
-### 1. Add JitPack repository to your project:
 
-```xml
-<repositories>
-  <repository>
-	  <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-```
 
-### 2. Add juzraai/toolbox dependency to your project:
+## License
 
-```xml
-<dependency>
-  <groupId>com.github.juzraai</groupId>
-  <artifactId>toolbox</artifactId>
-  <version>VERSION</version>
-</dependency>
-```
+This project is licensed under **Free Public License 1.0.0**, please see `LICENSE` file for details.
 
-You can check the latest version on this page.
+
 
 ## Features
 
-class       | description    | since
-------------|----------------|------
-`hash.MD5`  | MD5 hashing    | 0.1.0
-`net.Proxy` | Proxy settings | 0.1.0
+class                                  | description
+---------------------------------------|----------------
+`hu.juzraai.toolbox.hash.MD5`          | MD5 hashing
+`hu.juzraai.toolbox.meta.Dependencies` | Dependency checking
+`hu.juzraai.toolbox.net.Proxy`         | Proxy settings
+`hu.juzraai.toolbox.test.Check`        | Preconditions
+
+See their *javadoc* for more information.
+
+Some features need dependencies to be added to your build file. I designed *Toolbox* to look for the required classes and inform you which dependencies are needed.
+
+
+
+## Version history
+
+### 0.2.0
+
+* Added dependency helper mechanism
+* Added preconditions
+* Added preconditions and logging into existing features
+
+### 0.1.0
+
+* Added MD5 hashing
+* Added proxy settings
