@@ -20,7 +20,8 @@ import hu.juzraai.toolbox.test.Check;
  * <pre>
  * public class A {
  * 	static {
- * 		Dependencies.need(new Dependency("class", "group", "id", "version"));
+ * 		Dependencies.need(new Dependency("class1", "group1", "id1", "version1"),
+ * 				new Dependency("class2", "group2", "id2", "version2"));
  * 	}
  * }
  * </pre>
@@ -80,21 +81,31 @@ public class Dependencies {
 	}
 
 	/**
-	 * Calls <code>Class.forName(d.c)</code> and if it throws a
-	 * <code>ClassNotFoundException</code>, prints out the generated Maven XML
-	 * code for the dependency, by calling <code>d.toString()</code>.
+	 * Calls <code>Class.forName(dependency.c)</code> for every
+	 * <code>Dependency</code> argument, catches
+	 * <code>ClassNotFoundException</code> and prints out required dependencies
+	 * in a form you can copy-paste it into your Maven POM file. If there were
+	 * at least one missing dependency, it calls a <code>System.exit(1)</code>
+	 * at the end, to terminate the application.
 	 *
-	 * @param d
-	 *            The dependency to check.
+	 * @param dependencies
+	 *            The dependencies to check.
 	 */
-	public static void need(Dependency d) {
-		try {
-			Class.forName(Check.notNull(d, "d must not be null").c);
-		} catch (ClassNotFoundException e) {
-			StringBuilder s = new StringBuilder();
-			s.append("*** DEPENDENCY REQUIRED:\n\n");
-			s.append(d.toString());
+	public static void need(Dependency... dependencies) {
+		boolean h = false;
+		StringBuilder s = new StringBuilder();
+		s.append("*** DEPENDENCIES REQUIRED:\n\n");
+		for (Dependency d : dependencies) {
+			try {
+				Class.forName(Check.notNull(d, "d must not be null").c);
+			} catch (ClassNotFoundException e) {
+				h = true;
+				s.append(d.toString());
+			}
+		}
+		if (h) {
 			System.err.println(s.toString());
+			System.exit(1);
 		}
 	}
 
