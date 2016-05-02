@@ -33,6 +33,11 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 ## Version history
 
+### 0.3.0-SNAPSHOT (currently in **master** but not released yet)
+
+* Added cache interface and gzip file cache implementation (awaits testing)
+* Improved dependency helper
+
 ### 0.2.0
 
 * Added dependency helper mechanism

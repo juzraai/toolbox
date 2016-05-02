@@ -92,12 +92,13 @@ public class Dependencies {
 	 *            The dependencies to check.
 	 */
 	public static void need(Dependency... dependencies) {
+		Check.notNull(dependencies, "dependencies must not be null");
 		boolean h = false;
 		StringBuilder s = new StringBuilder();
 		s.append("*** DEPENDENCIES REQUIRED:\n\n");
 		for (Dependency d : dependencies) {
 			try {
-				Class.forName(Check.notNull(d, "d must not be null").c);
+				Class.forName(Check.notNull(d, "dependency must not be null").c);
 			} catch (ClassNotFoundException e) {
 				h = true;
 				s.append(d.toString());

@@ -4,7 +4,7 @@
 
 	<groupId>hu.juzraai</groupId>
 	<artifactId>toolbox</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>toolbox</name>
