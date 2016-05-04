@@ -55,7 +55,7 @@ public class GzFileStringCache implements Cache<String> {
 
 	protected File id2File(String id) {
 		Check.notNull(id, "id must not be null");
-		Check.argument(id.matches("[A-Za-z0-9_.\\-\\/\\\\]"), "id must contain characters valid in a filename");
+		Check.argument(id.matches("[A-Za-z0-9_.\\-\\/\\\\]+"), "id must contain characters valid in a filename");
 		// TODO test pattern!
 		return new File(directory, id);
 	}
