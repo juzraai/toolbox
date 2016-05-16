@@ -20,6 +20,7 @@ This project is licensed under **Free Public License 1.0.0**, please see `LICENS
 
 class                                  | description
 ---------------------------------------|----------------
+`hu.juzraai.toolbox.cache.*Cache`      | Caching
 `hu.juzraai.toolbox.hash.MD5`          | MD5 hashing
 `hu.juzraai.toolbox.meta.Dependencies` | Dependency checking
 `hu.juzraai.toolbox.net.Proxy`         | Proxy settings

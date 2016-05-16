@@ -16,7 +16,6 @@ import java.util.zip.GZIPOutputStream;
  */
 public class GzFileStringCache implements Cache<String> {
 	// TODO test i/o
-	// TODO log
 	// TODO doc
 
 	public static final String VALID_KEY_PATTERN = "[A-Za-z0-9_.\\-/\\\\]+";
