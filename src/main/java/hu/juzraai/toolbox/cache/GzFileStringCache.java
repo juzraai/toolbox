@@ -1,23 +1,27 @@
 package hu.juzraai.toolbox.cache;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import hu.juzraai.toolbox.log.LoggerFactory;
+import hu.juzraai.toolbox.test.Check;
+import org.slf4j.Logger;
+
+import java.io.*;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import hu.juzraai.toolbox.test.Check;
-
+/**
+ * @author Zsolt Jurányi
+ * @see Cache
+ * @since 0.3.0
+ */
 public class GzFileStringCache implements Cache<String> {
 	// TODO test i/o
 	// TODO log
 	// TODO doc
+
+	public static final String VALID_KEY_PATTERN = "[A-Za-z0-9_.\\-/\\\\]+";
+
+	private static final Logger L = LoggerFactory.getLogger(GzFileStringCache.class);
 
 	private final File directory;
 
@@ -27,24 +31,26 @@ public class GzFileStringCache implements Cache<String> {
 	}
 
 	@Override
-	public boolean contains(String id) {
-		return id2File(id).exists(); // checks performed inside
+	public boolean contains(String key) {
+		return key2File(key).exists(); // checks performed inside
 	}
 
 	@Override
-	public String fetch(String id) {
-		File file = id2File(id); // checks performed inside
+	public String fetch(String key) {
+		File file = key2File(key); // checks performed inside
 		String content = null;
 		if (file.exists()) {
 			try (FileInputStream fis = new FileInputStream(file);
-					InputStream gis = new GZIPInputStream(fis);
-					Scanner s = new Scanner(gis, "UTF8")) {
+				 InputStream gis = new GZIPInputStream(fis);
+				 Scanner s = new Scanner(gis, "UTF8")) {
 				content = s.useDelimiter("\\Z").next();
+				L.info("'{}' fetched from cache, content length: {}", key, content.length());
+				L.debug("'{}' <- {}", key, file.getAbsolutePath());
 			} catch (IOException e) {
-				file.delete();
-				// TODO log
-				e.printStackTrace();
+				L.error(String.format("IO error when fetching '%s'", key), e);
 			}
+		} else {
+			L.warn("File for key '{}' not found: {}", key, file.getAbsolutePath());
 		}
 		return content;
 	}
@@ -53,36 +59,43 @@ public class GzFileStringCache implements Cache<String> {
 		return directory;
 	}
 
-	protected File id2File(String id) {
-		Check.notNull(id, "id must not be null");
-		Check.argument(id.matches("[A-Za-z0-9_.\\-\\/\\\\]+"), "id must contain characters valid in a filename");
-		// TODO test pattern!
-		return new File(directory, id);
+	protected File key2File(String key) {
+		Check.notNull(key, "key must not be null");
+		Check.argument(key.matches(VALID_KEY_PATTERN), "key must contain characters valid in a filename");
+		return new File(directory, key);
 	}
 
 	protected void mkdirsForFile(File file) {
 		File parent = file.getParentFile();
-		if (null != parent) {
-			parent.mkdirs();
+		if (null != parent && (!parent.exists() || !parent.isDirectory())) {
+			L.info("Creating cache directory: {}", parent.getAbsolutePath());
+			if (!parent.mkdirs()) {
+				L.error("Could not create cache directory: {}", parent.getAbsolutePath());
+			}
 		}
 	}
 
 	@Override
 	public void remove(String key) {
-		id2File(key).delete();
+		File file = key2File(key);
+		if (file.exists() && !file.delete()) {
+			L.error("Failed to remove '{}': {}", key, file.getAbsolutePath());
+		}
 	}
 
 	@Override
-	public boolean store(String id, String content) {
-		File file = id2File(id);
+	public boolean store(String key, String content) {
+		File file = key2File(key);
 		mkdirsForFile(file);
 		try (FileOutputStream fos = new FileOutputStream(file);
-				OutputStream gos = new GZIPOutputStream(fos);
-				Writer w = new OutputStreamWriter(gos, "UTF-8")) {
+			 OutputStream gos = new GZIPOutputStream(fos);
+			 Writer w = new OutputStreamWriter(gos, "UTF-8")) {
 			w.write(content);
 			w.flush();
+			L.info("'{}' stored, content length: {}, file size: {}", key, content.length(), file.length());
+			L.debug("'{}' -> {}", key, file.getAbsolutePath());
 		} catch (Exception e) {
-			e.printStackTrace();
+			L.error(String.format("Failed to store key '%s' to file: %s", key, file.getAbsolutePath()), e);
 			return false;
 		}
 		return true;
