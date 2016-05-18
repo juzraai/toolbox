@@ -15,10 +15,9 @@ import java.util.zip.GZIPOutputStream;
  * @since 0.3.0
  */
 public class GzFileStringCache implements Cache<String> {
-	// TODO test i/o
 	// TODO doc
 
-	public static final String VALID_KEY_PATTERN = "[A-Za-z0-9_.\\-/\\\\]+";
+	public static final String VALID_KEY_PATTERN = "[A-Za-z0-9_.\\-/\\\\]*[^\\\\/]";
 
 	private static final Logger L = LoggerFactory.getLogger(GzFileStringCache.class);
 
@@ -93,7 +92,7 @@ public class GzFileStringCache implements Cache<String> {
 			w.flush();
 			L.info("'{}' stored, content length: {}, file size: {}", key, content.length(), file.length());
 			L.debug("'{}' -> {}", key, file.getAbsolutePath());
-		} catch (Exception e) {
+		} catch (IOException e) {
 			L.error(String.format("Failed to store key '%s' to file: %s", key, file.getAbsolutePath()), e);
 			return false;
 		}

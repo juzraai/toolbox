@@ -27,8 +27,6 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 	private static final String KEY_WITH_SUBDIR = String.format("subdir%sfilename", File.separator);
 	private final GzFileStringCache cache = new GzFileStringCache(DIRECTORY);
 
-	// TODO test invalid key (store)
-
 	@AfterClass
 	@BeforeClass
 	public static void deleteCacheDirectory() throws IOException {
@@ -43,6 +41,12 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 	@Test(expected = NullPointerException.class)
 	public void containsShouldThrowExceptionForNullArg() {
 		cache.contains(null);
+	}
+
+	@Test
+	public void containsShouldWorkWithSubdirectories() {
+		cache.store(KEY_WITH_SUBDIR, provideUniqueTestData());
+		assertTrue(cache.contains(KEY_WITH_SUBDIR));
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -86,6 +90,11 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 	}
 
 	@Test
+	public void keyPatternShouldNotAcceptBacklashSuffix() {
+		assertFalse("something\\".matches(GzFileStringCache.VALID_KEY_PATTERN));
+	}
+
+	@Test
 	public void keyPatternShouldNotAcceptDoubleQuote() {
 		assertFalse("file\"name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
 	}
@@ -96,8 +105,28 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 	}
 
 	@Test
+	public void keyPatternShouldNotAcceptNewline() {
+		assertFalse("file\nname.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+	}
+
+	@Test
 	public void keyPatternShouldNotAcceptSingleQuote() {
 		assertFalse("file'name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+	}
+
+	@Test
+	public void keyPatternShouldNotAcceptSlashSuffix() {
+		assertFalse("something/".matches(GzFileStringCache.VALID_KEY_PATTERN));
+	}
+
+	@Test
+	public void keyPatternShouldNotAcceptSpace() {
+		assertFalse("file name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+	}
+
+	@Test
+	public void keyPatternShouldNotAcceptTab() {
+		assertFalse("file\tname.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
 	}
 
 	@Override
@@ -110,21 +139,17 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 		return Long.toString(System.nanoTime());
 	}
 
+	@Test
+	public void removeShouldWorkWithSubdirectories() {
+		cache.store(KEY_WITH_SUBDIR, provideUniqueTestData());
+		cache.remove(KEY_WITH_SUBDIR);
+		assertFalse(cache.contains(KEY_WITH_SUBDIR));
+	}
+
 	@Override
 	public void removeUsedKeys() {
 		super.removeUsedKeys();
 		cache.remove(KEY_WITH_SUBDIR);
-	}
-
-	@Test
-	public void shouldWorkWithSubdirectories() {
-		String value = provideUniqueTestData();
-		cache.store(KEY_WITH_SUBDIR, value);
-		assertTrue(cache.contains(KEY_WITH_SUBDIR));
-		assertEquals(value, cache.fetch(KEY_WITH_SUBDIR));
-		cache.remove(KEY_WITH_SUBDIR);
-		assertFalse(cache.contains(KEY_WITH_SUBDIR));
-		// TODO would b prettier separated? :)
 	}
 
 	@Test
@@ -143,5 +168,12 @@ public class GzFileStringCacheTest extends CacheTest<String> {
 	@Test(expected = NullPointerException.class)
 	public void storeShouldThrowExceptionForNullArg() {
 		cache.store(null, provideUniqueTestData());
+	}
+
+	@Test
+	public void storeShouldWorkWithSubdirectories() {
+		String value = provideUniqueTestData();
+		cache.store(KEY_WITH_SUBDIR, value);
+		assertEquals(value, cache.fetch(KEY_WITH_SUBDIR));
 	}
 }

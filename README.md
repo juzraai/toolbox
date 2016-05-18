@@ -1,4 +1,4 @@
-# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox)
+# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) ![Build Status Images](https://travis-ci.org/juzraai/author-tagger.svg)
 
 **Collection of my reusable codes. :)**
 
@@ -38,6 +38,7 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 * Added cache interface and gzip file cache implementation (awaits testing)
 * Improved dependency helper
+* Improved MD5 hashing
 
 ### 0.2.0
 
