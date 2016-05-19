@@ -10,29 +10,55 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
+ * {@link Cache} implementation which stores {@link String} objects in GZipped
+ * text files, in the specified cache directory. In this cache the key is the
+ * filename.
+ *
  * @author Zsolt Jurányi
  * @see Cache
  * @since 0.3.0
  */
 public class GzFileStringCache implements Cache<String> {
-	// TODO doc
 
+	/**
+	 * The given key is matched against this pattern. A valid key can contain
+	 * letters, numbers, underscore (_), dash (-), slash (/), backslash (/), and
+	 * should not end with slash or backslash.
+	 */
 	public static final String VALID_KEY_PATTERN = "[A-Za-z0-9_.\\-/\\\\]*[^\\\\/]";
 
 	private static final Logger L = LoggerFactory.getLogger(GzFileStringCache.class);
 
 	private final File directory;
 
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param directory The cache directory where files will be stored.
+	 */
 	public GzFileStringCache(File directory) {
 		Check.notNull(directory, "directory must not be null");
 		this.directory = directory;
 	}
 
+	/**
+	 * Checks if the specified file exists in the cache directory.
+	 *
+	 * @param key Filename inside cache directory to be checked
+	 * @return <code>true</code> if the key exists, <code>false</code> otherwise
+	 */
 	@Override
 	public boolean contains(String key) {
 		return key2File(key).exists(); // checks performed inside
 	}
 
+	/**
+	 * Reads the contents of the specified file from cache directory.
+	 *
+	 * @param key Filename inside cache directory to be loaded
+	 * @return The content or <code>null</code> if the key doesn't exist in the
+	 * cache
+	 */
 	@Override
 	public String fetch(String key) {
 		File file = key2File(key); // checks performed inside
@@ -53,16 +79,32 @@ public class GzFileStringCache implements Cache<String> {
 		return content;
 	}
 
+	/**
+	 * @return The cache directory
+	 */
 	public File getDirectory() {
 		return directory;
 	}
 
+	/**
+	 * Validates the given key then generates a {@link File} object from it. It
+	 * will throw an {@link IllegalArgumentException} when the key is invalid.
+	 *
+	 * @param key Key to be transformed into a {@link File}
+	 * @return A {@link File} object which points to a file having the key as
+	 * its name, inside the cache directory
+	 */
 	protected File key2File(String key) {
 		Check.notNull(key, "key must not be null");
 		Check.argument(key.matches(VALID_KEY_PATTERN), "key must contain characters valid in a filename");
 		return new File(directory, key);
 	}
 
+	/**
+	 * Creates the parent directory tree for the given file.
+	 *
+	 * @param file File which needs its parent directories to be created
+	 */
 	protected void mkdirsForFile(File file) {
 		File parent = file.getParentFile();
 		if (null != parent && (!parent.exists() || !parent.isDirectory())) {
@@ -73,6 +115,11 @@ public class GzFileStringCache implements Cache<String> {
 		}
 	}
 
+	/**
+	 * Deletes the specified file from cache directory.
+	 *
+	 * @param key Filename inside cache directory to be removed
+	 */
 	@Override
 	public void remove(String key) {
 		File file = key2File(key);
@@ -81,6 +128,14 @@ public class GzFileStringCache implements Cache<String> {
 		}
 	}
 
+	/**
+	 * Stores the given contents into a GZip file in the cache directory.
+	 *
+	 * @param key     Filename inside cache directory
+	 * @param content The content to be stored
+	 * @return <code>true</code> if the storing succeded, <code>false</code> if
+	 * it failed
+	 */
 	@Override
 	public boolean store(String key, String content) {
 		File file = key2File(key);

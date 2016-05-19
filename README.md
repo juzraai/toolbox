@@ -34,9 +34,15 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 ## Version history
 
-### 0.3.0-SNAPSHOT (currently in **master** but not released yet)
+### 16.06-SNAPSHOT
 
-* Added cache interface and gzip file cache implementation (awaits testing)
+Currently in **master**, will be released on *June 1st, 2016*.
+
+* Switching from semantic versioning to datecode, like Ubuntu
+    1. there's no framework to use major version for
+    2. I always add new features besides fixes, so bugfix number is also unnecessary
+    3. I don't do releases too often, but when I do, the version number will tell the date! :D
+* Added cache interface and gzip file cache implementation
 * Improved dependency helper
 * Improved MD5 hashing
 
