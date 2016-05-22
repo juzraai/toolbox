@@ -12,11 +12,12 @@ import java.util.zip.GZIPOutputStream;
 /**
  * {@link Cache} implementation which stores {@link String} objects in GZipped
  * text files, in the specified cache directory. In this cache the key is the
- * filename.
+ * filename. The 4 main methods are all <code>synchronized</code> to avoid
+ * concurrent I/O operations.
  *
  * @author Zsolt Jurányi
  * @see Cache
- * @since 0.3.0
+ * @since 16.06
  */
 public class GzFileStringCache implements Cache<String> {
 
@@ -37,8 +38,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * @param directory The cache directory where files will be stored.
 	 */
 	public GzFileStringCache(File directory) {
-		Check.notNull(directory, "directory must not be null");
-		this.directory = directory;
+		this.directory = Check.notNull(directory, "directory must not be null");
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * @return <code>true</code> if the key exists, <code>false</code> otherwise
 	 */
 	@Override
-	public boolean contains(String key) {
+	public synchronized boolean contains(String key) {
 		return key2File(key).exists(); // checks performed inside
 	}
 
@@ -60,7 +60,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * cache
 	 */
 	@Override
-	public String fetch(String key) {
+	public synchronized String fetch(String key) {
 		File file = key2File(key); // checks performed inside
 		String content = null;
 		if (file.exists()) {
@@ -121,7 +121,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * @param key Filename inside cache directory to be removed
 	 */
 	@Override
-	public void remove(String key) {
+	public synchronized void remove(String key) {
 		File file = key2File(key);
 		if (file.exists() && !file.delete()) {
 			L.error("Failed to remove '{}': {}", key, file.getAbsolutePath());
@@ -137,7 +137,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * it failed
 	 */
 	@Override
-	public boolean store(String key, String content) {
+	public synchronized boolean store(String key, String content) {
 		File file = key2File(key);
 		mkdirsForFile(file);
 		try (FileOutputStream fos = new FileOutputStream(file);

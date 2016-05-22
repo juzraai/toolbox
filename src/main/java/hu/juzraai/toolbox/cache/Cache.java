@@ -5,7 +5,7 @@ package hu.juzraai.toolbox.cache;
  *
  * @param <T> Type of content which the cache handles.
  * @author Zsolt Jurányi
- * @since 0.2.0
+ * @since 16.06
  */
 public interface Cache<T> {
 

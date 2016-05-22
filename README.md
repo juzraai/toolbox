@@ -24,6 +24,7 @@ class                                  | description
 `hu.juzraai.toolbox.hash.MD5`          | MD5 hashing
 `hu.juzraai.toolbox.meta.Dependencies` | Dependency checking
 `hu.juzraai.toolbox.net.Proxy`         | Proxy settings
+`hu.juzraai.toolbox.parse.Regex`       | Regex helper
 `hu.juzraai.toolbox.test.Check`        | Preconditions
 
 See their *javadoc* for more information.
@@ -43,6 +44,7 @@ Currently in **master**, will be released on *June 1st, 2016*.
     2. I always add new features besides fixes, so bugfix number is also unnecessary
     3. I don't do releases too often, but when I do, the version number will tell the date! :D
 * Added cache interface and gzip file cache implementation
+* Added regex helper
 * Improved dependency helper
 * Improved MD5 hashing
 
