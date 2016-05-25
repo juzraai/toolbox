@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  *
  * @author Zsolt Jurányi
  * @see Cache
- * @since 0.3.0
+ * @since 16.06
  */
 public abstract class CacheTest<T> {
 

@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * @see Cache
  * @see CacheTest
  * @see GzFileStringCache
- * @since 0.3.0
+ * @since 16.06
  */
 public class GzFileStringCacheTest extends CacheTest<String> {
 

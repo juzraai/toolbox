@@ -4,6 +4,8 @@ import hu.juzraai.toolbox.log.LoggerFactory;
 import hu.juzraai.toolbox.test.Check;
 import org.slf4j.Logger;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
@@ -37,7 +39,7 @@ public class GzFileStringCache implements Cache<String> {
 	 *
 	 * @param directory The cache directory where files will be stored.
 	 */
-	public GzFileStringCache(File directory) {
+	public GzFileStringCache(@Nonnull File directory) {
 		this.directory = Check.notNull(directory, "directory must not be null");
 	}
 
@@ -48,7 +50,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * @return <code>true</code> if the key exists, <code>false</code> otherwise
 	 */
 	@Override
-	public synchronized boolean contains(String key) {
+	public synchronized boolean contains(@Nonnull String key) {
 		return key2File(key).exists(); // checks performed inside
 	}
 
@@ -60,7 +62,8 @@ public class GzFileStringCache implements Cache<String> {
 	 * cache
 	 */
 	@Override
-	public synchronized String fetch(String key) {
+	@CheckForNull
+	public synchronized String fetch(@Nonnull String key) {
 		File file = key2File(key); // checks performed inside
 		String content = null;
 		if (file.exists()) {
@@ -82,6 +85,7 @@ public class GzFileStringCache implements Cache<String> {
 	/**
 	 * @return The cache directory
 	 */
+	@Nonnull
 	public File getDirectory() {
 		return directory;
 	}
@@ -94,7 +98,8 @@ public class GzFileStringCache implements Cache<String> {
 	 * @return A {@link File} object which points to a file having the key as
 	 * its name, inside the cache directory
 	 */
-	protected File key2File(String key) {
+	@Nonnull
+	protected File key2File(@Nonnull String key) {
 		Check.notNull(key, "key must not be null");
 		Check.argument(key.matches(VALID_KEY_PATTERN), "key must contain characters valid in a filename");
 		return new File(directory, key);
@@ -105,7 +110,7 @@ public class GzFileStringCache implements Cache<String> {
 	 *
 	 * @param file File which needs its parent directories to be created
 	 */
-	protected void mkdirsForFile(File file) {
+	protected void mkdirsForFile(@Nonnull File file) {
 		File parent = file.getParentFile();
 		if (null != parent && (!parent.exists() || !parent.isDirectory())) {
 			L.info("Creating cache directory: {}", parent.getAbsolutePath());
@@ -121,7 +126,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * @param key Filename inside cache directory to be removed
 	 */
 	@Override
-	public synchronized void remove(String key) {
+	public synchronized void remove(@Nonnull String key) {
 		File file = key2File(key);
 		if (file.exists() && !file.delete()) {
 			L.error("Failed to remove '{}': {}", key, file.getAbsolutePath());
@@ -137,7 +142,7 @@ public class GzFileStringCache implements Cache<String> {
 	 * it failed
 	 */
 	@Override
-	public synchronized boolean store(String key, String content) {
+	public synchronized boolean store(@Nonnull String key, String content) {
 		File file = key2File(key);
 		mkdirsForFile(file);
 		try (FileOutputStream fos = new FileOutputStream(file);

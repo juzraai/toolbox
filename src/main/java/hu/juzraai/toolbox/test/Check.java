@@ -1,12 +1,13 @@
 package hu.juzraai.toolbox.test;
 
+import javax.annotation.Nonnull;
+
 /**
  * Simple value validator methods. The idea taken from Guava's Preconditions but
  * I want to use these functions without including a 2 MB dependency. :)
  *
- * @since 0.2.0
  * @author Zsolt Jurányi
- *
+ * @since 0.2.0
  */
 public class Check {
 
@@ -15,10 +16,8 @@ public class Check {
 	 * <code>IllegalArgumentException</code> with a message given in the second
 	 * argument.
 	 *
-	 * @param b
-	 *            Expression to be tested
-	 * @param m
-	 *            Exception message
+	 * @param b Expression to be tested
+	 * @param m Exception message
 	 */
 	public static void argument(boolean b, String m) {
 		if (!b) {
@@ -31,14 +30,12 @@ public class Check {
 	 * <code>NullPointerException</code> with a message given in the second
 	 * argument, otherwise returns the passed object.
 	 *
-	 * @param o
-	 *            Reference to be tested
-	 * @param m
-	 *            Exception message
-	 * @param <T>
-	 *            Type of the tested reference
+	 * @param o   Reference to be tested
+	 * @param m   Exception message
+	 * @param <T> Type of the tested reference
 	 * @return The examined object
 	 */
+	@Nonnull
 	public static <T> T notNull(T o, String m) {
 		if (null == o) {
 			throw new NullPointerException(m);
@@ -51,10 +48,8 @@ public class Check {
 	 * <code>IllegalStateException</code> with a message given in the second
 	 * argument.
 	 *
-	 * @param b
-	 *            Expression to be tested
-	 * @param m
-	 *            Exception message
+	 * @param b Expression to be tested
+	 * @param m Exception message
 	 */
 	public static void state(boolean b, String m) {
 		if (!b) {

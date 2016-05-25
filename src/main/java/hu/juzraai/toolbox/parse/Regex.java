@@ -2,6 +2,7 @@ package hu.juzraai.toolbox.parse;
 
 import hu.juzraai.toolbox.test.Check;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ public class Regex {
 	 *
 	 * @param pattern {@link Pattern} to use
 	 */
-	public Regex(Pattern pattern) {
+	public Regex(@Nonnull Pattern pattern) {
 		this.pattern = Check.notNull(pattern, "pattern must not be null");
 	}
 
@@ -40,6 +41,7 @@ public class Regex {
 	/**
 	 * @return The pattern
 	 */
+	@Nonnull
 	public Pattern getPattern() {
 		return pattern;
 	}
@@ -50,6 +52,7 @@ public class Regex {
 	 *
 	 * @return Names of named groups in a {@link Set}
 	 */
+	@Nonnull
 	public Set<String> groupNames() {
 		// http://stackoverflow.com/questions/15588903/get-group-names-in-java-regex
 		Set<String> namedGroups = new TreeSet<>();
@@ -69,7 +72,8 @@ public class Regex {
 	 * @return Map of group values, keys will be the group indices and names
 	 * @see #groupsToMap(Matcher, Map)
 	 */
-	public Map<String, String> groupsIntoMap(String input) {
+	@Nonnull
+	public Map<String, String> groupsIntoMap(@Nonnull String input) {
 		Check.notNull(input, "input must not be null");
 		Map<String, String> map = new HashMap<>();
 		Matcher matcher = pattern.matcher(input);
@@ -89,7 +93,8 @@ public class Regex {
 	 * indices and names
 	 * @see #groupsToMap(Matcher, Map)
 	 */
-	public List<Map<String, String>> groupsIntoMaps(String input) {
+	@Nonnull
+	public List<Map<String, String>> groupsIntoMaps(@Nonnull String input) {
 		Check.notNull(input, "input must not be null");
 		List<Map<String, String>> list = new ArrayList<>();
 		Matcher matcher = pattern.matcher(input);
@@ -118,7 +123,7 @@ public class Regex {
 	 * @see Matcher
 	 * @see #groupNames()
 	 */
-	protected void groupsToMap(Matcher matcher, Map<String, String> map) {
+	protected void groupsToMap(@Nonnull Matcher matcher, @Nonnull Map<String, String> map) {
 		Check.notNull(matcher, "matcher must not be null");
 		Check.notNull(map, "map must not be null");
 

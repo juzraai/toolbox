@@ -1,5 +1,8 @@
 package hu.juzraai.toolbox.cache;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 /**
  * This interface describes the common functionalities of a cache.
  *
@@ -15,7 +18,7 @@ public interface Cache<T> {
 	 * @param key Key to be checked
 	 * @return <code>true</code> if the key exists, <code>false</code> otherwise
 	 */
-	boolean contains(String key);
+	boolean contains(@Nonnull String key);
 
 	/**
 	 * Returns the stored content identified by the given key.
@@ -24,14 +27,15 @@ public interface Cache<T> {
 	 * @return The content object or <code>null</code> if the key doesn't exist
 	 * in the cache
 	 */
-	T fetch(String key);
+	@CheckForNull
+	T fetch(@Nonnull String key);
 
 	/**
 	 * Removes the content identified by the key from the cache.
 	 *
 	 * @param key Key to be removed from cache
 	 */
-	void remove(String key);
+	void remove(@Nonnull String key);
 
 	/**
 	 * Stores the given content identified by the given key.
@@ -41,6 +45,6 @@ public interface Cache<T> {
 	 * @return <code>true</code> if the storing succeded, <code>false</code> if
 	 * it failed
 	 */
-	boolean store(String key, T content);
+	boolean store(@Nonnull String key, T content);
 
 }
