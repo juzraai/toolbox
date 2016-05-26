@@ -2,7 +2,6 @@ package hu.juzraai.toolbox.test.cache;
 
 import hu.juzraai.toolbox.cache.Cache;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -24,7 +23,11 @@ public abstract class CacheTest<T> {
 	protected static final String NON_EXISTENT_KEY = "non-existent-key";
 	protected static final String REMOVED_KEY = "removed-key";
 
-	private Cache<T> cache;
+	protected final Cache<T> cache;
+
+	protected CacheTest(Cache<T> cache) {
+		this.cache = cache;
+	}
 
 	@Test
 	public void containsShouldReturnFalseForNonExistentKey() {
@@ -66,13 +69,6 @@ public abstract class CacheTest<T> {
 		assertNull(cache.fetch(REMOVED_KEY));
 	}
 
-	protected abstract Cache provideCacheImplementation();
-
-	@Test
-	public void provideCacheImplementationShouldNotReturnNull() {
-		assertNotNull(provideCacheImplementation());
-	}
-
 	protected abstract T provideUniqueTestData();
 
 	@Test
@@ -87,11 +83,6 @@ public abstract class CacheTest<T> {
 			set.add(provideUniqueTestData());
 		}
 		assertEquals(100, set.size());
-	}
-
-	@Before
-	public void receiveCacheImplementation() {
-		cache = provideCacheImplementation();
 	}
 
 	@After
