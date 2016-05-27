@@ -1,14 +1,12 @@
 package hu.juzraai.toolbox.test.cache;
 
-import hu.juzraai.toolbox.cache.Cache;
 import hu.juzraai.toolbox.cache.GzFileStringCache;
 
 /**
  * Testing the functionalities of {@link GzFileStringCache}.
  *
  * @author Zsolt Jurányi
- * @see Cache
- * @see CacheTest
+ * @see FileCacheTest
  * @see GzFileStringCache
  * @since 16.06
  */

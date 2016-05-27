@@ -19,8 +19,9 @@ import static org.junit.Assert.*;
  *
  * @param <T>
  * @author Zsolt Jurányi
- * @version 16.06
+ * @see CacheTest
  * @see FileCache
+ * @since 16.06
  */
 public abstract class FileCacheTest<T> extends CacheTest<T> {
 
