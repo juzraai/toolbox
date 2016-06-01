@@ -35,9 +35,7 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 ## Version history
 
-### 16.06-SNAPSHOT
-
-Currently in **master**, will be released on *June 1st, 2016*.
+### 16.06
 
 * Switching from semantic versioning to datecode, like Ubuntu
     1. there's no framework to use major version for
