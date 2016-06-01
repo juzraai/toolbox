@@ -61,7 +61,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	@Override
 	@CheckForNull
 	public synchronized T fetch(@Nonnull String key) {
-		File file = key2File(key);
+		File file = key2File(key); // checks performed inside
 		return file.exists() ? load(key, file) : null;
 	}
 
@@ -123,7 +123,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 */
 	@Override
 	public synchronized void remove(@Nonnull String key) {
-		File file = key2File(key);
+		File file = key2File(key); // checks performed inside
 		if (file.exists() && !file.delete()) {
 			L.error("Failed to remove '{}': {}", key, file.getAbsolutePath());
 		}
@@ -144,7 +144,8 @@ public abstract class FileCache<T> implements Cache<T> {
 	protected abstract boolean save(@Nonnull String key, @Nonnull File file, T content);
 
 	/**
-	 * Stores the given contents into a file in the cache directory.
+	 * Stores the given contents into a file in the cache directory. Cache
+	 * directory is created automatically.
 	 *
 	 * @param key     Filename inside cache directory
 	 * @param content The content to be stored
@@ -153,7 +154,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 */
 	@Override
 	public synchronized boolean store(@Nonnull String key, T content) {
-		File file = key2File(key);
+		File file = key2File(key); // checks performed inside
 		mkdirsForFile(file);
 		return save(key, file, content);
 	}

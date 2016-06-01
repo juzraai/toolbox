@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  * @author Zsolt Jurányi
  * @since 16.06
  */
-public interface Cache<T> {
+public interface Cache<T> { // TODO handle content as non-null too
 
 	/**
 	 * Checks if the given key exists in the cache.

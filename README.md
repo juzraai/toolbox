@@ -45,6 +45,7 @@ Currently in **master**, will be released on *June 1st, 2016*.
     3. I don't do releases too often, but when I do, the version number will tell the date! :D
 * Added cache interface and file cache implementations
 * Added regex helper
+* Improved code quality by adding `@Nonnull` and `@CheckForNull` annotations
 * Improved dependency helper
 * Improved MD5 hashing
 

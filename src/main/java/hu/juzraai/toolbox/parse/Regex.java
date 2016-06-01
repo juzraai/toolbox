@@ -30,12 +30,9 @@ public class Regex {
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		Regex that = (Regex) o;
-
-		return pattern.equals(that.pattern);
-
+		if (!(o instanceof Regex)) return false;
+		Regex regex = (Regex) o;
+		return pattern.equals(regex.pattern);
 	}
 
 	/**
@@ -148,4 +145,5 @@ public class Regex {
 	public int hashCode() {
 		return pattern.hashCode();
 	}
+
 }
