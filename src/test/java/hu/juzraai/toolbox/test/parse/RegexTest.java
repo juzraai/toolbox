@@ -20,10 +20,10 @@ import static org.junit.Assert.*;
  */
 public class RegexTest {
 
+	private static final String MATCHING_INPUT = "Something 23, something 42. Something 0, something 1.";
+	private static final String NOT_MATCHING_INPUT = "Something else.";
 	private final Regex REGEX_WITH_GROUPS = new Regex(Pattern.compile("Something (?<old>\\d+), something (?<new>\\d+)."));
 	private final Regex REGEX_WITHOUT_GROUPS = new Regex(Pattern.compile("Something \\d+, something \\d+."));
-	private final String MATCHING_INPUT = "Something 23, something 42. Something 0, something 1.";
-	private final String NOT_MATCHING_INPUT = "Something else.";
 
 	@Test
 	public void groupNamesShouldReturnEmptySetIfNoGroups() {

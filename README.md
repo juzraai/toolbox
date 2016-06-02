@@ -18,14 +18,15 @@ This project is licensed under **Free Public License 1.0.0**, please see `LICENS
 
 ## Features
 
-class                                  | description
----------------------------------------|----------------
-`hu.juzraai.toolbox.cache.*Cache`      | Caching
-`hu.juzraai.toolbox.hash.MD5`          | MD5 hashing
-`hu.juzraai.toolbox.meta.Dependencies` | Dependency checking
-`hu.juzraai.toolbox.net.Proxy`         | Proxy settings
-`hu.juzraai.toolbox.parse.Regex`       | Regex helper
-`hu.juzraai.toolbox.test.Check`        | Preconditions
+class                                       | description
+--------------------------------------------|----------------
+`hu.juzraai.toolbox.cache.*Cache`           | Caching
+`hu.juzraai.toolbox.data.PaginationContext` | Pagination helper
+`hu.juzraai.toolbox.hash.MD5`               | MD5 hashing
+`hu.juzraai.toolbox.meta.Dependencies`      | Dependency checking
+`hu.juzraai.toolbox.net.Proxy`              | Proxy settings
+`hu.juzraai.toolbox.parse.Regex`            | Regex helper
+`hu.juzraai.toolbox.test.Check`             | Preconditions
 
 See their *javadoc* for more information.
 
@@ -34,6 +35,12 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 
 ## Version history
+
+### 16.07-SNAPSHOT
+
+Currently in **master** but not released yet.
+
+* Added pagination helper
 
 ### 16.06
 
