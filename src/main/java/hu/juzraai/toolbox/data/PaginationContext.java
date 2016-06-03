@@ -7,6 +7,10 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Zsolt Jurányi
+ * @since 16.07
+ */
 public class PaginationContext {
 	// TODO doc
 

@@ -11,15 +11,14 @@ import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Testing methods of {@link PaginationContext}.
+ *
+ * @author Zsolt Jurányi
+ * @see PaginationContext
+ * @since 16.07
+ */
 public class PaginationContextTest {
-
-	// TODO test getPagesToShow
-	// checks
-	// 0 page - empty
-	// 1 page - 0
-	// 2 page - 0,1
-	// 3 page width 1, current 0 - 0,null,2
-	// 5 page width 1, current 2 - 0,null,2,null
 
 	private static final List<PagesToShowTestCase> pagesToShowTestCases = new ArrayList<>();
 
@@ -37,21 +36,6 @@ public class PaginationContextTest {
 					}
 					pagesToShowTestCases.add(testCase);
 				}
-			}
-		}
-	}
-
-	@Test
-	public void _pagesToShowShouldWorkFine() {
-		for (PagesToShowTestCase testCase : pagesToShowTestCases) {
-			PaginationContext p = new PaginationContext(testCase.pageCount, 1);
-			try {
-				assertEquals(testCase.pageCount, p.getPageCount());
-				assertEquals(testCase.pagesToShow, p.getPagesToShow(testCase.width, testCase.currentPageIndex));
-			} catch (AssertionError e) {
-				System.out.println("Page count: " + testCase.pageCount);
-				System.out.println("Current page: " + testCase.currentPageIndex);
-				throw e;
 			}
 		}
 	}
@@ -81,6 +65,18 @@ public class PaginationContextTest {
 		new PaginationContext(1, 5).getOffset(0);
 	}
 
+	@Test
+	public void getOffsetShouldReturn0For1stPage() {
+		assertEquals(0, new PaginationContext(1, 5).getOffset(0));
+	}
+
+	@Test
+	public void getOffsetShouldReturnIndexMulRPP() {
+		assertEquals(5, new PaginationContext(20, 5).getOffset(1));
+		assertEquals(10, new PaginationContext(20, 5).getOffset(2));
+		assertEquals(15, new PaginationContext(20, 5).getOffset(3));
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void getOffsetShouldThrowExceptionForIndexGreaterThenPC() {
 		new PaginationContext(1, 5).getOffset(1);
@@ -92,6 +88,64 @@ public class PaginationContextTest {
 	}
 
 	@Test
+	public void getPageCountShouldIncreaseWhenRCIsOverRPP() {
+		assertEquals(2, new PaginationContext(6, 5).getPageCount());
+		assertEquals(2, new PaginationContext(10, 5).getPageCount());
+		assertEquals(3, new PaginationContext(11, 5).getPageCount());
+	}
+
+	@Test
+	public void getPageCountShouldReturn0WhenRCIs0() {
+		assertEquals(0, new PaginationContext(0, 5).getPageCount());
+	}
+
+	@Test
+	public void getPageCountShouldReturn1WhenRCEqualsRPP() {
+		assertEquals(1, new PaginationContext(5, 5).getPageCount());
+	}
+
+	@Test
+	public void getPageCountShouldReturn1WhenRCIsLessThanRPP() {
+		assertEquals(1, new PaginationContext(1, 5).getPageCount());
+		assertEquals(1, new PaginationContext(4, 5).getPageCount());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getPagesToShowShouldThrowExceptionFor0Width() {
+		new PaginationContext(1, 1).getPagesToShow(0, 0);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getPagesToShowShouldThrowExceptionForIndexGreaterThenPC() {
+		new PaginationContext(1, 1).getPagesToShow(1, 1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getPagesToShowShouldThrowExceptionForNegativeIndex() {
+		new PaginationContext(1, 1).getPagesToShow(1, -1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void getPagesToShowShouldThrowExceptionForNegativeWidth() {
+		new PaginationContext(1, 1).getPagesToShow(-1, 0);
+	}
+
+	@Test
+	public void getPagesToShowShouldWorkFine() {
+		for (PagesToShowTestCase testCase : pagesToShowTestCases) {
+			PaginationContext p = new PaginationContext(testCase.pageCount, 1);
+			try {
+				assertEquals(testCase.pageCount, p.getPageCount());
+				assertEquals(testCase.pagesToShow, p.getPagesToShow(testCase.width, testCase.currentPageIndex));
+			} catch (AssertionError e) {
+				System.out.println("Page count: " + testCase.pageCount);
+				System.out.println("Current page: " + testCase.currentPageIndex);
+				throw e;
+			}
+		}
+	}
+
+	@Test
 	public void getRecordCountShouldReturnRecordCount() {
 		assertEquals(42, new PaginationContext(42, 10).getRecordCount());
 	}
@@ -99,41 +153,6 @@ public class PaginationContextTest {
 	@Test
 	public void getRecordsPerPageShouldReturnRecordsPerPage() {
 		assertEquals(10, new PaginationContext(42, 10).getRecordsPerPage());
-	}
-
-	@Test
-	public void offsetShouldBe0On1stPage() {
-		assertEquals(0, new PaginationContext(1, 5).getOffset(0));
-	}
-
-	@Test
-	public void offsetShouldBeIndexMulRPP() {
-		assertEquals(5, new PaginationContext(20, 5).getOffset(1));
-		assertEquals(10, new PaginationContext(20, 5).getOffset(2));
-		assertEquals(15, new PaginationContext(20, 5).getOffset(3));
-	}
-
-	@Test
-	public void pageCountShouldBe0WhenRCIs0() {
-		assertEquals(0, new PaginationContext(0, 5).getPageCount());
-	}
-
-	@Test
-	public void pageCountShouldBe1WhenRCEqualsRPP() {
-		assertEquals(1, new PaginationContext(5, 5).getPageCount());
-	}
-
-	@Test
-	public void pageCountShouldBe1WhenRCIsLessThanRPP() {
-		assertEquals(1, new PaginationContext(1, 5).getPageCount());
-		assertEquals(1, new PaginationContext(4, 5).getPageCount());
-	}
-
-	@Test
-	public void pageCountShouldIncreaseWhenRCIsOverRPP() {
-		assertEquals(2, new PaginationContext(6, 5).getPageCount());
-		assertEquals(2, new PaginationContext(10, 5).getPageCount());
-		assertEquals(3, new PaginationContext(11, 5).getPageCount());
 	}
 
 	private static class PagesToShowTestCase {
