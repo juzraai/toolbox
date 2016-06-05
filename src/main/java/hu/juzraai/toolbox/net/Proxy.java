@@ -1,7 +1,6 @@
 package hu.juzraai.toolbox.net;
 
 import hu.juzraai.toolbox.log.LoggerFactory;
-import hu.juzraai.toolbox.test.Check;
 import org.slf4j.Logger;
 
 import javax.annotation.Nonnull;
@@ -28,7 +27,6 @@ public class Proxy {
 	 * @param port Proxy port
 	 */
 	public static void use(@Nonnull final String host, final int port) {
-		Check.notNull(host, "host must not be null");
 		L.info("Using proxy: {}:{}", host, port);
 		System.setProperty("http.proxyHost", host);
 		System.setProperty("http.proxyPort", Integer.toString(port));
@@ -44,8 +42,6 @@ public class Proxy {
 	 * @param pass Proxy password
 	 */
 	public static void use(@Nonnull final String host, final int port, @Nonnull final String user, @Nonnull final String pass) {
-		Check.notNull(user, "user must not be null");
-		Check.notNull(pass, "pass must not be null");
 		use(host, port);
 		L.info("Using proxy authentication: {}:***", user);
 		Authenticator.setDefault(new Authenticator() {

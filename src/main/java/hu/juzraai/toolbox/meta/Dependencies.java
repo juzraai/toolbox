@@ -1,7 +1,5 @@
 package hu.juzraai.toolbox.meta;
 
-import hu.juzraai.toolbox.test.Check;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -43,13 +41,12 @@ public class Dependencies {
 	 * @param dependencies The dependencies to check.
 	 */
 	public static void need(@Nonnull Dependency... dependencies) {
-		Check.notNull(dependencies, "dependencies must not be null");
 		boolean h = false;
 		StringBuilder s = new StringBuilder();
 		s.append("*** DEPENDENCIES REQUIRED:\n\n");
 		for (Dependency d : dependencies) {
 			try {
-				Class.forName(Check.notNull(d, "dependency must not be null").c);
+				Class.forName(d.c);
 			} catch (ClassNotFoundException e) {
 				h = true;
 				s.append(d.toString());

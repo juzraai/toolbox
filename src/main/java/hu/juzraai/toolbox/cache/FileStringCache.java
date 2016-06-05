@@ -3,6 +3,7 @@ package hu.juzraai.toolbox.cache;
 import hu.juzraai.toolbox.log.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.Scanner;
@@ -37,6 +38,7 @@ public class FileStringCache extends FileCache<String> {
 	 * @return The contents of the plain text file
 	 */
 	@Override
+	@CheckForNull
 	protected String load(@Nonnull String key, @Nonnull File file) {
 		String content = null;
 		try (Scanner s = new Scanner(file, "UTF8")) {
@@ -60,7 +62,7 @@ public class FileStringCache extends FileCache<String> {
 	 * it failed
 	 */
 	@Override
-	protected boolean save(@Nonnull String key, @Nonnull File file, String content) {
+	protected boolean save(@Nonnull String key, @Nonnull File file, @Nonnull String content) {
 		try (FileOutputStream fos = new FileOutputStream(file);
 			 Writer w = new OutputStreamWriter(fos, "UTF-8")) {
 			w.write(content);

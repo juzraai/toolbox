@@ -37,7 +37,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 * @param directory The cache directory where files will be stored.
 	 */
 	public FileCache(@Nonnull File directory) {
-		this.directory = Check.notNull(directory, "directory must not be null");
+		this.directory = directory;
 	}
 
 	/**
@@ -83,7 +83,6 @@ public abstract class FileCache<T> implements Cache<T> {
 	 */
 	@Nonnull
 	protected File key2File(@Nonnull String key) {
-		Check.notNull(key, "key must not be null");
 		Check.argument(key.matches(VALID_KEY_PATTERN), "key must contain characters valid in a filename");
 		return new File(directory, key);
 	}
@@ -99,6 +98,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 * @return The contents of the file or <code>null</code> on error
 	 * @see #fetch(String)
 	 */
+	@CheckForNull
 	protected abstract T load(@Nonnull String key, @Nonnull File file);
 
 	/**
@@ -110,7 +110,7 @@ public abstract class FileCache<T> implements Cache<T> {
 		File parent = file.getParentFile();
 		if (null != parent && (!parent.exists() || !parent.isDirectory())) {
 			L.info("Creating cache directory: {}", parent.getAbsolutePath());
-			if (!parent.mkdirs()) {
+			if (!parent.mkdirs()) { // TODO exception?
 				L.error("Could not create cache directory: {}", parent.getAbsolutePath());
 			}
 		}
@@ -141,7 +141,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 * it failed
 	 * @see #store(String, Object)
 	 */
-	protected abstract boolean save(@Nonnull String key, @Nonnull File file, T content);
+	protected abstract boolean save(@Nonnull String key, @Nonnull File file, @Nonnull T content);
 
 	/**
 	 * Stores the given contents into a file in the cache directory. Cache
@@ -153,7 +153,7 @@ public abstract class FileCache<T> implements Cache<T> {
 	 * it failed
 	 */
 	@Override
-	public synchronized boolean store(@Nonnull String key, T content) {
+	public synchronized boolean store(@Nonnull String key, @Nonnull T content) {
 		File file = key2File(key); // checks performed inside
 		mkdirsForFile(file);
 		return save(key, file, content);

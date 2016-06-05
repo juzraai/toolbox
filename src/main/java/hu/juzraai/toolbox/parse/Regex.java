@@ -1,7 +1,5 @@
 package hu.juzraai.toolbox.parse;
 
-import hu.juzraai.toolbox.test.Check;
-
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -24,7 +22,7 @@ public class Regex {
 	 * @param pattern {@link Pattern} to use
 	 */
 	public Regex(@Nonnull Pattern pattern) {
-		this.pattern = Check.notNull(pattern, "pattern must not be null");
+		this.pattern = pattern;
 	}
 
 	@Override
@@ -71,7 +69,6 @@ public class Regex {
 	 */
 	@Nonnull
 	public Map<String, String> groupsIntoMap(@Nonnull String input) {
-		Check.notNull(input, "input must not be null");
 		Map<String, String> map = new HashMap<>();
 		Matcher matcher = pattern.matcher(input);
 		if (matcher.find()) {
@@ -92,7 +89,6 @@ public class Regex {
 	 */
 	@Nonnull
 	public List<Map<String, String>> groupsIntoMaps(@Nonnull String input) {
-		Check.notNull(input, "input must not be null");
 		List<Map<String, String>> list = new ArrayList<>();
 		Matcher matcher = pattern.matcher(input);
 		while (matcher.find()) {
@@ -121,8 +117,6 @@ public class Regex {
 	 * @see #groupNames()
 	 */
 	protected void groupsToMap(@Nonnull Matcher matcher, @Nonnull Map<String, String> map) {
-		Check.notNull(matcher, "matcher must not be null");
-		Check.notNull(map, "map must not be null");
 
 		// anonymous groups - by index
 		for (int groupIndex = 0; groupIndex <= matcher.groupCount(); groupIndex++) {
@@ -146,4 +140,11 @@ public class Regex {
 		return pattern.hashCode();
 	}
 
+	@Override
+	@Nonnull
+	public String toString() {
+		return "Regex{" +
+				"pattern=" + pattern +
+				'}';
+	}
 }

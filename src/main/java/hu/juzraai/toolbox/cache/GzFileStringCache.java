@@ -3,6 +3,7 @@ package hu.juzraai.toolbox.cache;
 import hu.juzraai.toolbox.log.LoggerFactory;
 import org.slf4j.Logger;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.Scanner;
@@ -39,6 +40,7 @@ public class GzFileStringCache extends FileCache<String> {
 	 * @return The contents of the Gzipped text file
 	 */
 	@Override
+	@CheckForNull
 	protected String load(@Nonnull String key, @Nonnull File file) {
 		String content = null;
 		try (FileInputStream fis = new FileInputStream(file);
@@ -64,7 +66,7 @@ public class GzFileStringCache extends FileCache<String> {
 	 * it failed
 	 */
 	@Override
-	protected boolean save(@Nonnull String key, @Nonnull File file, String content) {
+	protected boolean save(@Nonnull String key, @Nonnull File file, @Nonnull String content) {
 		try (FileOutputStream fos = new FileOutputStream(file);
 			 OutputStream gos = new GZIPOutputStream(fos);
 			 Writer w = new OutputStreamWriter(gos, "UTF-8")) {

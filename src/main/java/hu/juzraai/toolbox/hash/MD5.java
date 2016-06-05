@@ -1,7 +1,5 @@
 package hu.juzraai.toolbox.hash;
 
-import hu.juzraai.toolbox.test.Check;
-
 import javax.annotation.Nonnull;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,7 +27,6 @@ public class MD5 { // TODO doc
 
 	@Nonnull
 	public static byte[] createChecksum(@Nonnull String filename) throws IOException, NoSuchAlgorithmException {
-		Check.notNull(filename, "filename must not be null");
 		MessageDigest complete = MessageDigest.getInstance("MD5");
 		try (InputStream fis = new FileInputStream(filename)) {
 			byte[] buffer = new byte[1024];
@@ -46,14 +43,12 @@ public class MD5 { // TODO doc
 
 	@Nonnull
 	public static String fromFile(@Nonnull String filename) throws Exception {
-		Check.notNull(filename, "filename must not be null");
 		byte[] b = createChecksum(filename);
 		return byteArrToString(b);
 	}
 
 	@Nonnull
 	public static String fromString(@Nonnull String s) throws NoSuchAlgorithmException {
-		Check.notNull(s, "s must not be null");
 		MessageDigest complete = MessageDigest.getInstance("MD5");
 		byte[] b = complete.digest(s.getBytes());
 		return byteArrToString(b);

@@ -42,11 +42,6 @@ public abstract class FileCacheTest<T> extends CacheTest<T> {
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void constructorShouldThrowExceptionForNullArg() {
-		new GzFileStringCache(null);
-	}
-
-	@Test(expected = NullPointerException.class)
 	public void containsShouldThrowExceptionForNullArg() {
 		cache.contains(null);
 	}
