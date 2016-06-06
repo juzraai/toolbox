@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract {@link Cache} implementation which stores contents in files, in the
@@ -19,7 +21,7 @@ import java.io.File;
  * @author Zsolt Jurányi
  * @since 16.06
  */
-public abstract class FileCache<T> implements Cache<T> {
+public abstract class FileCache<T> extends Cache<T> {
 
 	/**
 	 * The given key is matched against this pattern. A valid key can contain
@@ -31,12 +33,44 @@ public abstract class FileCache<T> implements Cache<T> {
 
 	private final File directory;
 
+
 	/**
-	 * Creates a new instance.
+	 * Creates a new instance. Elements of the cache will never expire.
 	 *
 	 * @param directory The cache directory where files will be stored.
 	 */
 	public FileCache(@Nonnull File directory) {
+		super(null);
+		this.directory = directory;
+	}
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param directory  The cache directory where files will be stored.
+	 * @param expiration Expiration in milliseconds. Elements in cache will be
+	 *                   handled as expired if this amount of time have elapsed
+	 *                   since their timestamp. If it's <code>null</code>,
+	 *                   cached elements will never expire.
+	 */
+	public FileCache(@Nonnull File directory, Long expiration) {
+		super(expiration);
+		this.directory = directory;
+	}
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param directory  The cache directory where files will be stored.
+	 * @param expiration Expiration in the time unit of your choice. Elements in
+	 *                   cache will be handled as expired if this amount of time
+	 *                   have elapsed since their timestamp.
+	 * @param timeUnit   {@link TimeUnit} object representing the time unit you
+	 *                   specified <code>duration</code> in. It's used to
+	 *                   convert <code>duration</code> to milliseconds.
+	 */
+	public FileCache(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
+		super(expiration, timeUnit);
 		this.directory = directory;
 	}
 
@@ -157,5 +191,17 @@ public abstract class FileCache<T> implements Cache<T> {
 		File file = key2File(key); // checks performed inside
 		mkdirsForFile(file);
 		return save(key, file, content);
+	}
+
+	/**
+	 * Returns the last modified date of the file identified by the given key.
+	 *
+	 * @param key Key which identifies the element
+	 * @return The last modified date of the file
+	 */
+	@Override
+	public Date timestampOf(@Nonnull String key) {
+		File file = key2File(key); // checks performed inside
+		return new Date(file.lastModified());
 	}
 }
