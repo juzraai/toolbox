@@ -132,7 +132,6 @@ public abstract class FileCacheTest<T> extends CacheTest<T> {
 		assertFalse("file\tname.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
 	}
 
-
 	@Test
 	public void removeShouldWorkWithSubdirectories() {
 		cache.store(KEY_WITH_SUBDIR, provideUniqueTestData());
@@ -170,4 +169,5 @@ public abstract class FileCacheTest<T> extends CacheTest<T> {
 		cache.store(KEY_WITH_SUBDIR, value);
 		assertEquals(value, cache.fetch(KEY_WITH_SUBDIR));
 	}
+
 }

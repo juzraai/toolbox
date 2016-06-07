@@ -13,7 +13,7 @@ import hu.juzraai.toolbox.cache.GzFileStringCache;
 public class GzFileStringCacheTest extends FileCacheTest<String> {
 
 	public GzFileStringCacheTest() {
-		super(new GzFileStringCache(FileCacheTest.DIRECTORY));
+		super(new GzFileStringCache(FileCacheTest.DIRECTORY, EXPIRATION, EXPIRATION_TIME_UNIT));
 	}
 
 	@Override

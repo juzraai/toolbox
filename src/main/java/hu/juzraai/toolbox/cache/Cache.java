@@ -74,9 +74,24 @@ public abstract class Cache<T> {
 	public abstract T fetch(@Nonnull String key);
 
 	/**
+	 * Returns the stored content identified by the given key only if it's not
+	 * expired.
+	 *
+	 * @param key Key to identify the required content
+	 * @return The content object or <code>null</code> if the key is expired or
+	 * doesn't exist in the cache
+	 * @see #containsAndNotExpired(String)
+	 */
+	@CheckForNull
+	public T fetchIfNotExpired(@Nonnull String key) {
+		return containsAndNotExpired(key) ? fetch(key) : null;
+	}
+
+	/**
 	 * @return Expiration in milliseconds. If it's <code>null</code>, cached
 	 * elements will never expire.
 	 */
+	@CheckForNull
 	public Long getExpiration() {
 		return expiration;
 	}
@@ -118,6 +133,18 @@ public abstract class Cache<T> {
 	 * @param key Key to be removed from cache
 	 */
 	public abstract void remove(@Nonnull String key);
+
+	/**
+	 * Removes the content identified by the key from the cache only if it's
+	 * expired.
+	 *
+	 * @param key Key to be removed from cache
+	 */
+	public void removeIfExpired(@Nonnull String key) {
+		if (isExpired(key)) {
+			remove(key);
+		}
+	}
 
 	/**
 	 * Stores the given content identified by the given key.

@@ -7,6 +7,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * {@link FileCache} implementation which stores {@link String} objects in plain
@@ -27,6 +28,34 @@ public class FileStringCache extends FileCache<String> {
 	 */
 	public FileStringCache(@Nonnull File directory) {
 		super(directory);
+	}
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param directory  The cache directory where files will be stored.
+	 * @param expiration Expiration in milliseconds. Elements in cache will be
+	 *                   handled as expired if this amount of time have elapsed
+	 *                   since their timestamp. If it's <code>null</code>,
+	 *                   cached elements will never expire.
+	 */
+	public FileStringCache(@Nonnull File directory, Long expiration) {
+		super(directory, expiration);
+	}
+
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param directory  The cache directory where files will be stored.
+	 * @param expiration Expiration in the time unit of your choice. Elements in
+	 *                   cache will be handled as expired if this amount of time
+	 *                   have elapsed since their timestamp.
+	 * @param timeUnit   {@link TimeUnit} object representing the time unit you
+	 *                   specified <code>duration</code> in. It's used to
+	 *                   convert <code>duration</code> to milliseconds.
+	 */
+	public FileStringCache(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
+		super(directory, expiration, timeUnit);
 	}
 
 	/**

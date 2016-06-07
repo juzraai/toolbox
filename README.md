@@ -1,4 +1,4 @@
-# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) ![Build Status Images](https://travis-ci.org/juzraai/author-tagger.svg)
+# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) [![Build status](https://travis-ci.org/juzraai/author-tagger.svg)](https://travis-ci.org/juzraai/toolbox)
 
 **Collection of my reusable codes. :)**
 
@@ -41,6 +41,7 @@ Some features need dependencies to be added to your build file. I designed *Tool
 Currently in **master** but not released yet.
 
 * Added pagination helper
+* Added expiration feature to `Cache` and `FileCache` implementations
 
 ### 16.06
 

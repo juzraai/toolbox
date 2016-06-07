@@ -13,7 +13,7 @@ import hu.juzraai.toolbox.cache.FileStringCache;
 public class FileStringCacheTest extends FileCacheTest<String> {
 
 	public FileStringCacheTest() {
-		super(new FileStringCache(FileCacheTest.DIRECTORY));
+		super(new FileStringCache(FileCacheTest.DIRECTORY, EXPIRATION, EXPIRATION_TIME_UNIT));
 	}
 
 	@Override
