@@ -4,6 +4,7 @@ import hu.juzraai.toolbox.cache.Cache;
 import org.junit.After;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -18,12 +19,6 @@ import static org.junit.Assert.*;
  * @since 16.06
  */
 public abstract class CacheTest<T> {
-
-	// TODO test expiration
-	// - removeIfExpiredShouldNotRemoveNotExpired: store, remove, contains -> true
-	// - removeIfExpiredShouldRemoveIfExpired: store, sleep, remove, contains -> false
-	// - store should generate timestamp: now, store now, timestamp of between 2 now
-	// - store should update timestamp: store, timestampOf, store, timestampOf
 
 	protected static final long EXPIRATION = 3;
 	protected static final TimeUnit EXPIRATION_TIME_UNIT = TimeUnit.SECONDS;
@@ -88,7 +83,7 @@ public abstract class CacheTest<T> {
 
 	private boolean expirationEnabled() {
 		if (null == cache.getExpiration()) {
-			System.out.printf("WARN: Expiration not enabled in cache%n\tTest class: %s%n\tCache class: %s%n", getClass().getName(), cache.getClass().getName());
+			System.out.printf("WARN: Expiration not enabled in cache: %s (test class: %s)%n", cache.getClass().getName(), getClass().getSimpleName());
 			return false;
 		}
 		return true;
@@ -106,9 +101,11 @@ public abstract class CacheTest<T> {
 
 	@Test
 	public void fetchIfNotExpiredShouldReturnNullForExpiredKey() throws InterruptedException {
-		cache.store(KEY_1, provideUniqueTestData());
-		Thread.sleep(EXPIRATION_TEST_SLEEP);
-		assertNull(cache.fetchIfNotExpired(KEY_1));
+		if (expirationEnabled()) {
+			cache.store(KEY_1, provideUniqueTestData());
+			Thread.sleep(EXPIRATION_TEST_SLEEP);
+			assertNull(cache.fetchIfNotExpired(KEY_1));
+		}
 	}
 
 	@Test
@@ -154,11 +151,58 @@ public abstract class CacheTest<T> {
 		assertEquals(100, set.size());
 	}
 
+	@Test
+	public void removeIfExpiredShouldNotRemoveIfNotExpired() {
+		if (expirationEnabled()) {
+			cache.store(KEY_1, provideUniqueTestData());
+			cache.removeIfExpired(KEY_1);
+			assertTrue(cache.contains(KEY_1));
+		}
+	}
+
+	@Test
+	public void removeIfExpiredShouldRemoveIfExpired() throws InterruptedException {
+		if (expirationEnabled()) {
+			cache.store(KEY_1, provideUniqueTestData());
+			Thread.sleep(EXPIRATION_TEST_SLEEP);
+			cache.removeIfExpired(KEY_1);
+			assertFalse(cache.contains(KEY_1));
+		}
+	}
+
 	@After
 	public void removeUsedKeys() {
 		cache.remove(KEY_1);
 		cache.remove(KEY_2);
 		cache.remove(NON_EXISTENT_KEY);
 		cache.remove(REMOVED_KEY);
+	}
+
+	@Test
+	public void storeShouldGenerateTimestamp() {
+		if (expirationEnabled()) {
+			long t1 = new Date().getTime();
+			cache.store(KEY_1, provideUniqueTestData());
+			long t2 = new Date().getTime();
+			Date d = cache.timestampOf(KEY_1);
+			long t = null == d ? 0 : d.getTime();
+			assertTrue(t1 <= t && t <= t2);
+		}
+	}
+
+	@Test
+	public void storeShouldUpdateTimestamp() throws InterruptedException {
+		if (expirationEnabled()) {
+			cache.store(KEY_1, provideUniqueTestData());
+			Date d1 = cache.timestampOf(KEY_1);
+			long t1 = null == d1 ? 0 : d1.getTime();
+
+			Thread.sleep(10);
+
+			cache.store(KEY_1, provideUniqueTestData());
+			Date d2 = cache.timestampOf(KEY_1);
+			long t2 = null == d2 ? 0 : d2.getTime();
+			assertTrue(t1 < t2);
+		}
 	}
 }
