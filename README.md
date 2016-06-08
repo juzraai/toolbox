@@ -1,4 +1,4 @@
-# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) [![Build status](https://travis-ci.org/juzraai/author-tagger.svg)](https://travis-ci.org/juzraai/toolbox)
+# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) [![Build status](https://travis-ci.org/juzraai/toolbox.svg)](https://travis-ci.org/juzraai/toolbox)
 
 **Collection of my reusable codes. :)**
 

@@ -197,7 +197,7 @@ public abstract class CacheTest<T> {
 			Date d1 = cache.timestampOf(KEY_1);
 			long t1 = null == d1 ? 0 : d1.getTime();
 
-			Thread.sleep(10);
+			Thread.sleep(1000);
 
 			cache.store(KEY_1, provideUniqueTestData());
 			Date d2 = cache.timestampOf(KEY_1);
