@@ -186,6 +186,12 @@ public abstract class CacheTest<T> {
 			long t2 = new Date().getTime();
 			Date d = cache.timestampOf(KEY_1);
 			long t = null == d ? 0 : d.getTime();
+
+			// debugging Travis fail:
+			System.out.println("d = " + d);
+			System.out.println("t = " + t);
+			System.out.println("t2= " + t2);
+
 			assertTrue(t1 <= t && t <= t2);
 		}
 	}
