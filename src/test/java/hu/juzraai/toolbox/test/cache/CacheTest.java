@@ -188,7 +188,7 @@ public abstract class CacheTest<T> {
 			long t = null == d ? 0 : d.getTime();
 
 			// debugging Travis fail:
-			System.out.println("d = " + d);
+			System.out.println("t1= " + t2);
 			System.out.println("t = " + t);
 			System.out.println("t2= " + t2);
 
