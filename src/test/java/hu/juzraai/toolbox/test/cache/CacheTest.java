@@ -179,19 +179,19 @@ public abstract class CacheTest<T> {
 	}
 
 	@Test
-	public void storeShouldGenerateTimestamp() {
+	public void storeShouldGenerateTimestamp() throws InterruptedException {
 		if (expirationEnabled()) {
 			long t1 = new Date().getTime();
+
+			Thread.sleep(1000); // filesystem used by Travis handles only seconds in file timestamps
+
 			cache.store(KEY_1, provideUniqueTestData());
+
+			Thread.sleep(1000); // filesystem used by Travis handles only seconds in file timestamps
+			
 			long t2 = new Date().getTime();
 			Date d = cache.timestampOf(KEY_1);
 			long t = null == d ? 0 : d.getTime();
-
-			// debugging Travis fail:
-			System.out.println("t1= " + t2);
-			System.out.println("t = " + t);
-			System.out.println("t2= " + t2);
-
 			assertTrue(t1 <= t && t <= t2);
 		}
 	}
@@ -203,7 +203,7 @@ public abstract class CacheTest<T> {
 			Date d1 = cache.timestampOf(KEY_1);
 			long t1 = null == d1 ? 0 : d1.getTime();
 
-			Thread.sleep(1000);
+			Thread.sleep(1000); // filesystem used by Travis handles only seconds in file timestamps
 
 			cache.store(KEY_1, provideUniqueTestData());
 			Date d2 = cache.timestampOf(KEY_1);
