@@ -21,8 +21,10 @@ This project is licensed under **Free Public License 1.0.0**, please see `LICENS
 class                                       | description
 --------------------------------------------|----------------
 `hu.juzraai.toolbox.cache.*Cache`           | Caching
+`hu.juzraai.toolbox.data.Identifiable`      | Helper interface
 `hu.juzraai.toolbox.data.PaginationContext` | Pagination helper
 `hu.juzraai.toolbox.hash.MD5`               | MD5 hashing
+`hu.juzraai.toolbox.jdbc.*ConnectionString` | JDBC connection string builders
 `hu.juzraai.toolbox.meta.Dependencies`      | Dependency checking
 `hu.juzraai.toolbox.net.Proxy`              | Proxy settings
 `hu.juzraai.toolbox.parse.Regex`            | Regex helper
@@ -42,6 +44,8 @@ Currently in **master** but not released yet.
 
 * Added pagination helper
 * Added expiration feature to `Cache` and `FileCache` implementations
+* Added `Identifiable` helper interface
+* Added JDBC connection string builder for MySQL
 
 ### 16.06
 
