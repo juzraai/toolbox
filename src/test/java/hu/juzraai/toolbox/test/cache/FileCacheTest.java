@@ -3,7 +3,7 @@ package hu.juzraai.toolbox.test.cache;
 
 import hu.juzraai.toolbox.cache.Cache;
 import hu.juzraai.toolbox.cache.FileCache;
-import hu.juzraai.toolbox.cache.GzFileStringCache;
+import hu.juzraai.toolbox.cache.GzFileCacheForStrings;
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -64,72 +64,72 @@ public abstract class FileCacheTest<T> extends CacheTest<T> {
 
 	@Test
 	public void keyPatternShouldAcceptBackslash() {
-		assertTrue("directory\\filename.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertTrue("directory\\filename.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldAcceptDash() {
-		assertTrue("file-name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertTrue("file-name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldAcceptSlash() {
-		assertTrue("directory/filename.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertTrue("directory/filename.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldAcceptUnderscore() {
-		assertTrue("file_name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertTrue("file_name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldAcceptUsualFilemame() {
-		assertTrue("filename.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertTrue("filename.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptAsterisk() {
-		assertFalse("file*name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file*name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptBacklashSuffix() {
-		assertFalse("something\\".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("something\\".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptDoubleQuote() {
-		assertFalse("file\"name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file\"name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptEmptyString() {
-		assertFalse("".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptNewline() {
-		assertFalse("file\nname.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file\nname.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptSingleQuote() {
-		assertFalse("file'name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file'name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptSlashSuffix() {
-		assertFalse("something/".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("something/".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptSpace() {
-		assertFalse("file name.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file name.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test
 	public void keyPatternShouldNotAcceptTab() {
-		assertFalse("file\tname.ext".matches(GzFileStringCache.VALID_KEY_PATTERN));
+		assertFalse("file\tname.ext".matches(GzFileCacheForStrings.VALID_KEY_PATTERN));
 	}
 
 	@Test

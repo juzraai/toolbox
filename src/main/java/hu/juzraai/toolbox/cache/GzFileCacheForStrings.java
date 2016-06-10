@@ -19,16 +19,16 @@ import java.util.zip.GZIPOutputStream;
  * @see FileCache
  * @since 16.06
  */
-public class GzFileStringCache extends FileCache<String> {
+public class GzFileCacheForStrings extends FileCache<String> {
 
-	private static final Logger L = LoggerFactory.getLogger(GzFileStringCache.class);
+	private static final Logger L = LoggerFactory.getLogger(GzFileCacheForStrings.class);
 
 	/**
 	 * Creates a new instance.
 	 *
 	 * @param directory The cache directory where files will be stored.
 	 */
-	public GzFileStringCache(@Nonnull File directory) {
+	public GzFileCacheForStrings(@Nonnull File directory) {
 		super(directory);
 	}
 
@@ -41,7 +41,7 @@ public class GzFileStringCache extends FileCache<String> {
 	 *                   since their timestamp. If it's <code>null</code>,
 	 *                   cached elements will never expire.
 	 */
-	public GzFileStringCache(@Nonnull File directory, Long expiration) {
+	public GzFileCacheForStrings(@Nonnull File directory, Long expiration) {
 		super(directory, expiration);
 	}
 
@@ -56,7 +56,7 @@ public class GzFileStringCache extends FileCache<String> {
 	 *                   specified <code>duration</code> in. It's used to
 	 *                   convert <code>duration</code> to milliseconds.
 	 */
-	public GzFileStringCache(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
+	public GzFileCacheForStrings(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
 		super(directory, expiration, timeUnit);
 	}
 

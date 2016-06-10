@@ -17,16 +17,16 @@ import java.util.concurrent.TimeUnit;
  * @see FileCache
  * @since 16.06
  */
-public class FileStringCache extends FileCache<String> {
+public class FileCacheForStrings extends FileCache<String> {
 
-	private static final Logger L = LoggerFactory.getLogger(FileStringCache.class);
+	private static final Logger L = LoggerFactory.getLogger(FileCacheForStrings.class);
 
 	/**
 	 * Creates a new instance.
 	 *
 	 * @param directory The cache directory where files will be stored
 	 */
-	public FileStringCache(@Nonnull File directory) {
+	public FileCacheForStrings(@Nonnull File directory) {
 		super(directory);
 	}
 
@@ -39,7 +39,7 @@ public class FileStringCache extends FileCache<String> {
 	 *                   since their timestamp. If it's <code>null</code>,
 	 *                   cached elements will never expire.
 	 */
-	public FileStringCache(@Nonnull File directory, Long expiration) {
+	public FileCacheForStrings(@Nonnull File directory, Long expiration) {
 		super(directory, expiration);
 	}
 
@@ -54,7 +54,7 @@ public class FileStringCache extends FileCache<String> {
 	 *                   specified <code>duration</code> in. It's used to
 	 *                   convert <code>duration</code> to milliseconds.
 	 */
-	public FileStringCache(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
+	public FileCacheForStrings(@Nonnull File directory, long expiration, @Nonnull TimeUnit timeUnit) {
 		super(directory, expiration, timeUnit);
 	}
 
