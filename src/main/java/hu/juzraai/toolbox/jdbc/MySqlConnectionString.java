@@ -11,7 +11,7 @@ import static hu.juzraai.toolbox.meta.DependencyConstants.MYSQL;
  * @since 16.07
  */
 public class MySqlConnectionString extends ConnectionString {
-	// TODO test
+	// TODO test (getters, default values, generated cs)
 	// TODO doc
 
 	static {
@@ -22,19 +22,22 @@ public class MySqlConnectionString extends ConnectionString {
 	private final int port;
 	private final String schema;
 	private final boolean utf8;
-	private final String connectionString;
 
 	private MySqlConnectionString(Builder builder) {
 		host = builder.host;
 		port = builder.port;
 		schema = builder.schema;
 		utf8 = builder.utf8;
-		connectionString = String.format("jdbc:mysql://%s/%s%s", host, schema, utf8 ? "?useUnicode=true&characterEncoding=utf-8" : "");
 	}
 
 	@Nonnull
 	public static Builder newBuilder() {
 		return new Builder();
+	}
+
+	@Override
+	protected String generateConnectionString() {
+		return String.format("jdbc:mysql://%s/%s%s", host, schema, utf8 ? "?useUnicode=true&characterEncoding=utf-8" : "");
 	}
 
 	public String getHost() {
@@ -51,11 +54,6 @@ public class MySqlConnectionString extends ConnectionString {
 
 	public boolean isUtf8() {
 		return utf8;
-	}
-
-	@Override
-	public String toString() {
-		return connectionString;
 	}
 
 	/**

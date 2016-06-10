@@ -45,7 +45,7 @@ Currently in **master** but not released yet.
 * Added pagination helper
 * Added expiration feature to `Cache` and `FileCache` implementations
 * Added `Identifiable` helper interface
-* Added JDBC connection string builder for MySQL
+* Added JDBC connection string builders for MySQL and SQLite
 
 ### 16.06
 
