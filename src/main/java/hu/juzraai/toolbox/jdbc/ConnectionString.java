@@ -12,6 +12,10 @@ public abstract class ConnectionString { // TODO doc
 		return MySqlConnectionString.newBuilder();
 	}
 
+	public static SqliteConnectionString.Builder SQLITE() {
+		return SqliteConnectionString.newBuilder();
+	}
+
 	protected abstract String generateConnectionString();
 
 	@Override
