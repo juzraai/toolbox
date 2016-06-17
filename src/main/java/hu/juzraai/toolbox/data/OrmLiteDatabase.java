@@ -1,5 +1,6 @@
 package hu.juzraai.toolbox.data;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.field.DatabaseField;
@@ -8,7 +9,11 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTable;
 import com.j256.ormlite.table.TableUtils;
 import hu.juzraai.toolbox.jdbc.ConnectionString;
+import hu.juzraai.toolbox.jdbc.MySqlConnectionString;
+import hu.juzraai.toolbox.log.LoggerFactory;
 import hu.juzraai.toolbox.meta.Dependencies;
+import hu.juzraai.toolbox.test.Check;
+import org.slf4j.Logger;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -20,38 +25,69 @@ import java.sql.SQLException;
 import static hu.juzraai.toolbox.meta.DependencyConstants.*;
 
 /**
+ * Utility class which aims to ease using of ORMLite by adding generic methods
+ * and helper functions.
+ *
  * @author Zsolt Jurányi
+ * @since 16.07
  */
 public class OrmLiteDatabase {
-	// TODO since
 	// TODO test
 	// TODO doc
+
+	private static final Logger L = LoggerFactory.getLogger(OrmLiteDatabase.class);
 
 	static {
 		Dependencies.need(PERSISTENCE_API, ORMLITE_CORE, ORMLITE_JDBC);
 	}
 
+	private final ConnectionString connectionString;
 	private final ConnectionSource connectionSource;
 
-	private OrmLiteDatabase(@Nonnull ConnectionSource connectionSource) {
+	/**
+	 * Creates a new instance.
+	 *
+	 * @param connectionString
+	 * @param connectionSource The database connection
+	 */
+	private OrmLiteDatabase(ConnectionString connectionString, @Nonnull ConnectionSource connectionSource) {
+		this.connectionString = connectionString;
 		this.connectionSource = connectionSource;
 	}
 
+	/**
+	 * Builds a new <code>OrmLiteDatabase</code> instance.
+	 *
+	 * @param connectionString JDBC connection string builder
+	 * @param username         Username for database connection
+	 * @param password         Password for database connection
+	 * @return An <code>OrmLiteDatabase</code> instance initialized with a
+	 * {@link JdbcPooledConnectionSource}
+	 * @throws SQLException If any error occurs during database connection
+	 */
 	@Nonnull
 	public static OrmLiteDatabase build(@Nonnull ConnectionString connectionString, String username, String password) throws SQLException {
 		JdbcPooledConnectionSource connectionSource = new JdbcPooledConnectionSource(connectionString.toString(), username, password);
 		connectionSource.setTestBeforeGet(true);
-		return new OrmLiteDatabase(connectionSource);
+		return new OrmLiteDatabase(connectionString, connectionSource);
 	}
 
 	public void createTables(@Nonnull Class<?>... tableClasses) throws SQLException {
+		L.info("Creating tables if necessary");
 		for (Class<?> tableClass : tableClasses) {
+			L.trace("Creating table if necessary for class: {}", tableClass.getName());
 			TableUtils.createTableIfNotExists(connectionSource, tableClass);
-			for (Field f : tableClass.getDeclaredFields()) {
-				if (isDatabaseField(f) && f.isAnnotationPresent(Longtext.class)) {
-					String fn = fetchColumnName(f);
-					modifyColumnDefinition(tableClass, fn, "LONGTEXT NULL DEFAULT NULL");
+
+			// LONGTEXT and CHANGE COLUMN are MySQL specific:
+			if (connectionString instanceof MySqlConnectionString) {
+				for (Field f : tableClass.getDeclaredFields()) {
+					if (isDatabaseField(f) && f.isAnnotationPresent(Longtext.class)) {
+						String fn = fetchColumnName(f);
+						modifyMySqlColumn(tableClass, fn, "LONGTEXT NULL DEFAULT NULL");
+					}
 				}
+			} else {
+				L.trace("Annotation processing skipped, our database isn't MySQL");
 			}
 		}
 	}
@@ -64,6 +100,12 @@ public class OrmLiteDatabase {
 	public <T extends Identifiable<I>, I> T fetch(@Nonnull Class<T> tableClass, @Nonnull I id) throws SQLException {
 		Dao<T, I> dao = DaoManager.createDao(connectionSource, tableClass);
 		return dao.queryForId(id);
+	}
+
+	@Nonnull // TODO here we dont need Identifiable
+	public <T extends Identifiable<I>, I> CloseableIterator<T> fetchAll(@Nonnull Class<T> tableClass) throws SQLException {
+		Dao<T, I> dao = DaoManager.createDao(connectionSource, tableClass);
+		return dao.iterator();
 	}
 
 	@Nonnull
@@ -123,11 +165,16 @@ public class OrmLiteDatabase {
 		return connectionSource;
 	}
 
+	public ConnectionString getConnectionString() {
+		return connectionString;
+	}
+
 	private boolean isDatabaseField(@Nonnull Field f) {
 		return f.isAnnotationPresent(DatabaseField.class) || f.isAnnotationPresent(Column.class);
 	}
 
-	public void modifyColumnDefinition(@Nonnull Class<?> tableClass, @Nonnull String column, @Nonnull String definition) throws SQLException {
+	public void modifyMySqlColumn(@Nonnull Class<?> tableClass, @Nonnull String column, @Nonnull String definition) throws SQLException {
+		Check.state(connectionString instanceof MySqlConnectionString, "connectionString must be instanceof MySqlConnectionString");
 		String tn = fetchTableName(tableClass);
 		DaoManager.createDao(connectionSource, tableClass).executeRawNoArgs(
 				String.format("ALTER TABLE `%s` CHANGE COLUMN `%s` `%s` %s ;", tn, column, column, definition));
