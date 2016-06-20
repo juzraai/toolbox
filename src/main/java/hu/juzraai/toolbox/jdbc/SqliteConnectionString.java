@@ -34,6 +34,7 @@ public class SqliteConnectionString extends ConnectionString {
 	}
 
 	@Override
+	@Nonnull
 	protected String generateConnectionString() {
 		return String.format("jdbc:sqlite:%s", null == databaseFile ? "" : databaseFile.getPath());
 	}
