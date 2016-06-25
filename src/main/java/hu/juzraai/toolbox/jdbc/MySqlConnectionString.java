@@ -36,6 +36,7 @@ public class MySqlConnectionString extends ConnectionString {
 	}
 
 	@Override
+	@Nonnull
 	protected String generateConnectionString() {
 		return String.format("jdbc:mysql://%s/%s%s", host, schema, utf8 ? "?useUnicode=true&characterEncoding=utf-8" : "");
 	}
