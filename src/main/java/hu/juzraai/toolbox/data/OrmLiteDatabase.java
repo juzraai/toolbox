@@ -1,6 +1,5 @@
 package hu.juzraai.toolbox.data;
 
-import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.field.DatabaseField;
@@ -19,6 +18,8 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.io.Closeable;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
 
@@ -26,13 +27,13 @@ import static hu.juzraai.toolbox.meta.DependencyConstants.*;
 
 /**
  * Utility class which aims to ease using of ORMLite by adding generic methods
- * and helper functions.
+ * and helper functions. It's implemented as a {@link Closeable} so you can use
+ * it in a try-with-resources block.
  *
  * @author Zsolt Jurányi
  * @since 16.07
  */
-public class OrmLiteDatabase {
-	// TODO test
+public class OrmLiteDatabase implements Closeable {
 
 	private static final Logger L = LoggerFactory.getLogger(OrmLiteDatabase.class);
 
@@ -66,9 +67,23 @@ public class OrmLiteDatabase {
 	 */
 	@Nonnull
 	public static OrmLiteDatabase build(@Nonnull ConnectionString connectionString, String username, String password) throws SQLException {
+		L.debug("Opening database connection - {}", connectionString);
 		JdbcPooledConnectionSource connectionSource = new JdbcPooledConnectionSource(connectionString.toString(), username, password);
 		connectionSource.setTestBeforeGet(true);
 		return new OrmLiteDatabase(connectionString, connectionSource);
+	}
+
+	/**
+	 * Calls <code>closeQuietly</code> method of the {@link ConnectionSource}
+	 * object.
+	 *
+	 * @throws IOException
+	 * @see ConnectionSource
+	 */
+	@Override
+	public void close() throws IOException {
+		L.debug("Closing database connection - {}", connectionString);
+		this.connectionSource.closeQuietly();
 	}
 
 	/**
@@ -134,22 +149,6 @@ public class OrmLiteDatabase {
 		L.debug("Fetching ID '{}' using table class: {}", id.toString(), tableClass.getSimpleName());
 		Dao<T, I> dao = DaoManager.createDao(connectionSource, tableClass);
 		return dao.queryForId(id);
-	}
-
-	/**
-	 * Returns an iterator ({@link CloseableIterator}) for all the records of
-	 * the given table.
-	 *
-	 * @param tableClass Table class
-	 * @param <T>        Table class
-	 * @return Iterator you can use to go thru all the records in the table
-	 * @throws SQLException
-	 * @see CloseableIterator
-	 * @see DaoManager
-	 */
-	@Nonnull
-	public <T> CloseableIterator<T> fetchAll(@Nonnull Class<T> tableClass) throws SQLException {
-		return dao(tableClass).iterator();
 	}
 
 	/**
