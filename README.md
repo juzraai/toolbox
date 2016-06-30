@@ -22,6 +22,7 @@ class                                       | description
 --------------------------------------------|----------------
 `hu.juzraai.toolbox.cache.*Cache`           | Caching
 `hu.juzraai.toolbox.data.Identifiable`      | Helper interface
+`hu.juzraai.toolbox.data.OrmLiteDatabase`   | Utility for ORMLite
 `hu.juzraai.toolbox.data.PaginationContext` | Pagination helper
 `hu.juzraai.toolbox.hash.MD5`               | MD5 hashing
 `hu.juzraai.toolbox.jdbc.*ConnectionString` | JDBC connection string builders
@@ -46,6 +47,7 @@ Currently in **master** but not released yet.
 * Added expiration feature to `Cache` and `FileCache` implementations
 * Added `Identifiable` helper interface
 * Added JDBC connection string builders for MySQL and SQLite
+* Added `OrmLiteDatabase` utility
 
 ### 16.06
 

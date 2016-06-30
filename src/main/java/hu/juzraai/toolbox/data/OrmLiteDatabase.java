@@ -47,7 +47,7 @@ public class OrmLiteDatabase implements Closeable {
 	/**
 	 * Creates a new instance.
 	 *
-	 * @param connectionString
+	 * @param connectionString The connection string
 	 * @param connectionSource The database connection
 	 */
 	private OrmLiteDatabase(ConnectionString connectionString, @Nonnull ConnectionSource connectionSource) {
@@ -110,6 +110,7 @@ public class OrmLiteDatabase implements Closeable {
 						L.debug("Modifying field to LONGTEXT: {}.{}", tableClass.getSimpleName(), f.getName());
 						String fn = fetchColumnName(f);
 						modifyMySqlColumn(tableClass, fn, "LONGTEXT NULL DEFAULT NULL");
+						// TODO test longtext
 					}
 				}
 			} else {
