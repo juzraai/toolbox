@@ -39,9 +39,7 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 ## Version history
 
-### 16.07-SNAPSHOT
-
-Currently in **master** but not released yet.
+### 16.07
 
 * Added pagination helper
 * Added expiration feature to `Cache` and `FileCache` implementations
