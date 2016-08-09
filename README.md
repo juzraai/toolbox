@@ -26,6 +26,8 @@ class                                       | description
 `hu.juzraai.toolbox.data.PaginationContext` | Pagination helper
 `hu.juzraai.toolbox.hash.MD5`               | MD5 hashing
 `hu.juzraai.toolbox.jdbc.*ConnectionString` | JDBC connection string builders
+`hu.juzraai.toolbox.log.LoggerFactory`      | Wrapper for SLF4J's LoggerFactory
+`hu.juzraai.toolbox.log.LoggerSetup`        | Log configurator utility
 `hu.juzraai.toolbox.meta.Dependencies`      | Dependency checking
 `hu.juzraai.toolbox.net.Proxy`              | Proxy settings
 `hu.juzraai.toolbox.parse.Regex`            | Regex helper
@@ -38,6 +40,10 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 
 ## Version history
+
+### 16.08
+
+* Added logger setup utility and removed `log4j.properties`
 
 ### 16.07
 
