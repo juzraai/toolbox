@@ -1,6 +1,6 @@
-# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) [![Build status](https://travis-ci.org/juzraai/toolbox.svg)](https://travis-ci.org/juzraai/toolbox)
+# juzraai's Toolbox [![Release](https://jitpack.io/v/juzraai/toolbox.svg)](https://jitpack.io/#juzraai/toolbox) [![Build Status](https://travis-ci.org/juzraai/toolbox.svg?branch=master)](https://travis-ci.org/juzraai/toolbox) [![codebeat badge](https://codebeat.co/badges/75cfa9a0-f7d8-417d-88b3-6fcc73f4f9a3)](https://codebeat.co/projects/github-com-juzraai-toolbox)
 
-**Collection of my reusable codes. :)**
+*Collection of my reusable codes. :)*
 
 
 
