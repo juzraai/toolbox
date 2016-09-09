@@ -58,7 +58,7 @@ public class LoggerSetup {
 	 * @param filename The filename to be used by the file appender or
 	 *                 <code>null</code> to skip adding file appender
 	 */
-	public static void output(boolean console, @Nonnull String filename) {
+	public static void output(boolean console, String filename) {
 
 		// reset
 		getRootLogger().removeAllAppenders();

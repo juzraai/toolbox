@@ -153,6 +153,31 @@ public class OrmLiteDatabase implements Closeable {
 	}
 
 	/**
+	 * Fetches a record by ID from the given table. Does not throw exceptions,
+	 * they are logged and <code>null</code> will be returned instead.
+	 *
+	 * @param tableClass Table class
+	 * @param id         ID
+	 * @param <T>        Table class
+	 * @param <I>        ID type
+	 * @return The record from the given table having the given ID - or
+	 * <code>null</code> if there's no such record in the table or any error
+	 * occurred
+	 * @see DaoManager
+	 */
+	@CheckForNull
+	public <T extends Identifiable<I>, I> T fetchSilently(@Nonnull Class<T> tableClass, @Nonnull I id) {
+		L.debug("Fetching ID '{}' using table class: {}", id.toString(), tableClass.getSimpleName());
+		try {
+			Dao<T, I> dao = DaoManager.createDao(connectionSource, tableClass);
+			return dao.queryForId(id);
+		} catch (SQLException e) {
+			L.error(String.format("Failed to fetch record (class: %s, id: %s)", tableClass.getName(), id.toString()), e);
+			return null;
+		}
+	}
+
+	/**
 	 * Determines the database column name for the given {@link Field}. Returns
 	 * the column name specified using {@link DatabaseField} or {@link Column}
 	 * annotation, or returns the field name if none of them presents.
@@ -284,9 +309,31 @@ public class OrmLiteDatabase implements Closeable {
 	 * @see Dao
 	 */
 	public <T> void store(@Nonnull T entity) throws SQLException {
-		L.debug("Storing ID '{}' using table class: {}", entity.getClass().getSimpleName());
+		L.debug("Storing record of class {}", entity.getClass().getSimpleName());
 		Dao<T, ?> dao = dao((Class<T>) entity.getClass());
 		dao.createOrUpdate(entity);
+	}
+
+	/**
+	 * Fetches the appropriate DAO object then stores the specified entity using
+	 * <code>Dao.createOrUpdate</code>. Does not throw exception, they are
+	 * logged and a boolean indicating success will be returned instead.
+	 *
+	 * @param entity Entity to be stored
+	 * @param <T>    Table class
+	 * @return <code>true</code> if storing completed or <code>false</code> if
+	 * any error occurred
+	 */
+	public <T> boolean storeSilently(@Nonnull T entity) {
+		L.debug("Storing record of class {}", entity.getClass().getSimpleName());
+		try {
+			Dao<T, ?> dao = dao((Class<T>) entity.getClass());
+			dao.createOrUpdate(entity);
+			return true;
+		} catch (SQLException e) {
+			L.error("Failed to store record:" + entity.getClass().getName(), e);
+			return false;
+		}
 	}
 
 }
