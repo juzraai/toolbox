@@ -50,6 +50,14 @@ public class LoggerSetup {
 	}
 
 	/**
+	 * Simply calls {@link #output(boolean, String)} with arguments
+	 * <code>(true,null)</code>.
+	 */
+	public static void outputOnlyToConsole() {
+		output(true, null);
+	}
+
+	/**
 	 * Removes all appenders, then adds a {@link ConsoleAppender} if
 	 * <code>console</code> is <code>true</code>, and a {@link FileAppender} if
 	 * <code>filename</code> is not <code>null</code>.

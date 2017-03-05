@@ -12,8 +12,9 @@ import hu.juzraai.toolbox.meta.Dependencies.Dependency;
  */
 public class DependencyConstants {
 
-	public static final Dependency JSOUP = new Dependency("org.jsoup.Jsoup", "org.jsoup", "jsoup", "1.8.3");
-	public static final Dependency MYSQL = new Dependency("com.mysql.jdbc.Driver", "mysql", "mysql-connector", "5.1.36");
+	public static final Dependency JCOMMANDER = new Dependency("com.beust.jcommander.JCommander", "com.beust", "jcommander", "1.64");
+	public static final Dependency JSOUP = new Dependency("org.jsoup.Jsoup", "org.jsoup", "jsoup", "1.10.2");
+	public static final Dependency MYSQL = new Dependency("com.mysql.jdbc.Driver", "mysql", "mysql-connector-java", "5.1.36");
 	public static final Dependency ORMLITE_CORE = new Dependency("com.j256.ormlite.dao.DaoManager", "com.j256.ormlite", "ormlite-core", "4.48");
 	public static final Dependency ORMLITE_JDBC = new Dependency("com.j256.ormlite.jdbc.JdbcPooledConnectionSource", "com.j256.ormlite", "ormlite-jdbc", "4.48");
 	public static final Dependency PERSISTENCE_API = new Dependency("javax.persistence.Table", "javax.persistence", "persistence-api", "1.0.2");

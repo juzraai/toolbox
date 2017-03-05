@@ -41,6 +41,12 @@ Some features need dependencies to be added to your build file. I designed *Tool
 
 ## Version history
 
+### 17.03-SNAPSHOT
+
+* Added silent methods to `OrmLiteDatabase`
+* Added `outputOnlyToConsole` method to `LoggerSetup`
+* Fixed `mysql-connector-java` bug in `DependencyConstants`
+
 ### 16.08
 
 * Added logger setup utility and removed `log4j.properties`
