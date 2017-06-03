@@ -74,6 +74,31 @@ public class OrmLiteDatabase implements Closeable {
 	}
 
 	/**
+	 * Adds an index to the MySQL column specified by the two arguments.
+	 * If an index already exists, no new index will be added.
+	 * This method will throw {@link IllegalStateException} if
+	 * the database is not MySQL.
+	 *
+	 * @param tableClass The table class used to get DAO object and determine
+	 *                   database table name
+	 * @param column     Name of database column which needs an index
+	 * @throws SQLException
+	 * @see #fetchTableName(Class)
+	 */
+	public void addMySqlIndex(Class<?> tableClass, String column) throws SQLException {
+		Check.state(connectionString instanceof MySqlConnectionString, "connectionString must be instanceof MySqlConnectionString");
+		String tn = fetchTableName(tableClass);
+		String idx = String.format("%s_%s_idx", tn, column);
+		Dao<?, ?> dao = DaoManager.createDao(connectionSource, tableClass);
+		String sql = String.format("SHOW INDEX FROM %s WHERE Key_name = ?", tn);
+		if (dao.queryRaw(sql, idx).getResults().isEmpty()) {
+			sql = String.format("CREATE INDEX `%s` ON `%s` ( `%s` )", idx, tn, column);
+			L.debug("Using table class {} to execute raw SQL: {}", tableClass.getSimpleName(), sql);
+			dao.executeRawNoArgs(sql);
+		}
+	}
+
+	/**
 	 * Calls <code>closeQuietly</code> method of the {@link ConnectionSource}
 	 * object.
 	 *
@@ -106,12 +131,19 @@ public class OrmLiteDatabase implements Closeable {
 			// LONGTEXT and CHANGE COLUMN are MySQL specific:
 			if (connectionString instanceof MySqlConnectionString) {
 				for (Field f : tableClass.getDeclaredFields()) {
-					if (isDatabaseField(f) && f.isAnnotationPresent(Longtext.class)) {
-						L.debug("Modifying field to LONGTEXT: {}.{}", tableClass.getSimpleName(), f.getName());
+					if (isDatabaseField(f)) {
 						String fn = fetchColumnName(f);
-						modifyMySqlColumn(tableClass, fn, "LONGTEXT NULL DEFAULT NULL");
-						// TODO test longtext
+						if (f.isAnnotationPresent(Longtext.class)) {
+							L.debug("Modifying field to LONGTEXT: {}.{}", tableClass.getSimpleName(), f.getName());
+							modifyMySqlColumn(tableClass, fn, "LONGTEXT NULL DEFAULT NULL");
+							// TODO test longtext
+						}
+						if (f.isAnnotationPresent(Indexed.class)) {
+							L.debug("Adding index to field: {}.{}", tableClass.getSimpleName(), f.getName());
+							addMySqlIndex(tableClass, fn);
+						}
 					}
+
 				}
 			} else {
 				L.debug("Annotation processing skipped, our database isn't MySQL");
